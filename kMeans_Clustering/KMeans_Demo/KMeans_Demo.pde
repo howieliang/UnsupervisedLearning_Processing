@@ -1,8 +1,8 @@
 ArrayList <Dot> dots;
 ArrayList <Dot> clusters;
 
-int numClusters = 5;
-int numDots = 100;
+int numClusters = 3;
+int numDots = 1000;
 
 int iterations = 0;
 

@@ -13,7 +13,7 @@ boolean b_test = false;
 int label = 0;
 PGraphics pg;
 int K = 1;
-
+double WCSS = 0;
 int[] clusterAssignments;
 
 void setup() {
@@ -45,6 +45,7 @@ void draw() {
       kmeans.setNumClusters(K);
       kmeans.buildClusterer(training);
       clusterAssignments = kmeans.getAssignments();
+      WCSS = kmeans.getSquaredError();
       println(kmeans);
       weka.core.SerializationHelper.write(dataPath("kMean.model"), kmeans);
       //pg = getModelImage(pg, (Classifier)cls, training);
@@ -66,12 +67,20 @@ void draw() {
 
     float[] features = { x, y }; //form a feature array
     if (b_test) {
-      if(i<clusterAssignments.length) drawDataPoint(clusterAssignments[i], features); //draw the data on the Canvas
+      if (i<clusterAssignments.length) drawDataPoint(clusterAssignments[i], features); //draw the data on the Canvas
       else drawDataPoint(-1, features); //draw the data on the Canvas
-    }else{
+    } else {
       drawDataPoint(-1, features); //draw the data on the Canvas
     }
-    
+  }
+
+  if (b_test) {
+    pushStyle();
+    fill(0);
+    textSize(24);
+    text("K="+K, 20, 20);
+    text("WCSS="+nf((float)WCSS,0,2), 20, 44);
+    popStyle();
   }
 
   //if (b_test) {
@@ -180,13 +189,13 @@ void drawDataPoint(int _index, float[] _features) {
   textAlign(CENTER, CENTER);
 
   stroke(0);
-  if(_index<0) fill(255);
+  if (_index<0) fill(255);
   else fill(colors[_index]);
   ellipse(_features[0], _features[1], 20, 20);
 
   noStroke();
   fill(0);
-  if(_index>=0) text(_index, _features[0], _features[1]);
+  if (_index>=0) text(_index, _features[0], _features[1]);
 
   popStyle();
 }
